@@ -39,8 +39,17 @@ var nepalList = [
 var map;
 var marks = [];
 var center={lat: 27.715010, lng: 85.318097};
-
-// 
+// Add map to div
+function initMap() {
+  var mapProp = {
+    center:center,
+    zoom:16,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
+}
+initMap();
+// Automatically updated list with knockout.js
 function searchViewModel() {
   var self = this;
   self.iniList = ko.observableArray(nepalList);
@@ -48,15 +57,13 @@ function searchViewModel() {
   self.search = function(value) {
     //Remove all the current list items, which removes them from the view
     self.iniList([]);
-    if(value == '') return;
     for(var x in nepalList) {
       if(nepalList[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
         self.iniList.push(nepalList[x]);
       }
     }
+    //if(value == '') self.iniList = nepalList;
   };
-  self.query.subscribe(self.search);
-
-  // }
+self.query.subscribe(self.search);
 }
 ko.applyBindings(new searchViewModel());

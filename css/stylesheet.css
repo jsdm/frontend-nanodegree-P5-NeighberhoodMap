@@ -1,21 +1,16 @@
 body {
-  padding-top: 50px;
+  padding-top: 30px;
   padding-bottom: 20px;
 }
-.brand {
-  width: 100px;
-}
-.center {
-  vertical-align: middle;
-}
-
 .input {
   border-bottom: 1px grey solid;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+}
+.mapDiv {
+  padding-left: 15px;
+  border-left: 1px grey solid;
 }
 #googleMap {
   height: 550px;
-}
-#list {
-  min-height: 500px;
-  border-right: 1px grey solid;
 }
