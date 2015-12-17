@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="frameworks/knockout-3.3.0.js"></script>
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags (http://getbootstrap.com/getting-started/#template) -->
+<title>Neighborhood Map</title>
+<link rel="stylesheet" type="text/css" href="frameworks/bootstrap-3.3.5/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+</head>
+
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 input">
+      <p>
+        <label>Search </label>
+        <input type="search" data-bind="textInput: query" autofocus="autofocus" />
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3" id="list">
+      <H3><span>Key locations:</span></H3>
+      <ul data-bind="foreach: iniList">
+        <li>
+          <strong data-bind="text: name"></strong>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-9">
+    <div id="googleMap"></div>
+    </div>
+  </div>
+</div>
+
+<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script type="text/javascript" src="js/map.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="frameworks/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+</body>
+
+</html>
