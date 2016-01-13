@@ -1,21 +1,21 @@
 README
 
+This project was to do a searchable list that shows interesting points on a map.
+My list is about interesting points in Nepal city. When first loading the page all list items are present and all markers are viewable on the Google map. Writing in the search bar at the top, updates the list with only the item that contains the letters searched.
+
+Clicking on an item brings up a infowindow above the items marker and populates the information area with a clickable wikipedia header (to take you to Wikipedia) and a more elaborate 'snippet area' below with more information about the clicked list item.
 
 
-How will I complete this Project?
 
-  Review our course JavaScript Design Patterns.
-  Download the Knockout framework.
-Write code required to add a full-screen map to your page using the Google Maps API.
-Write code required to add map markers identifying a number of locations you are interested in within this neighborhood.
-Implement the search bar functionality.
-  Implement a list view of the identified locations.
-Add additional functionality using third-party APIs when a map marker, search result, or list view entry is clicked (ex. Yelp reviews, Wikipedia, Flickr images, etc). If you need a refresher on making AJAX requests to third-party servers, check out our Intro to AJAX course.
-Helpful Resources
 
-None of these are required, but they may be helpful.
 
-Yelp API
-MediaWikiAPI for Wikipedia
-Google Maps Street View Service
-Google Maps
+Helpful Resources:
+Udacity forums
+http://stackoverflow.com
+www.w3schools.com
+http://knockoutjs.com
+https://www.mediawiki.org/wiki/API:Tutorial
+https://developers.google.com/maps/documentation/javascript/
+http://api.jquery.com
+http://getbootstrap.com
+

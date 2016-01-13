@@ -1,6 +1,11 @@
 body {
+  height: 100%;
+  background-color: lightgrey;
   padding-top: 30px;
   padding-bottom: 20px;
+}
+ul {
+  list-style-type: none;
 }
 .input {
   border-bottom: 1px grey solid;
@@ -8,9 +13,18 @@ body {
   margin-bottom: 10px;
 }
 .mapDiv {
+  height: 100%;
   padding-left: 15px;
   border-left: 1px grey solid;
 }
+.container-fluid {
+  position: relative;
+  height: 100%;
+}
 #googleMap {
-  height: 550px;
+  min-height: 600px;
+  height: 100%;
+}
+.halfheight {
+  height: 50%
 }
