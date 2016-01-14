@@ -6,6 +6,7 @@ body {
 }
 ul {
   list-style-type: none;
+  padding-left: 10px;
 }
 .input {
   border-bottom: 1px grey solid;

@@ -7,21 +7,27 @@
 <script type="text/javascript" src="frameworks/knockout-3.3.0.js"></script>
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags (http://getbootstrap.com/getting-started/#template) -->
 <title>Neighborhood Map</title>
-<link rel="stylesheet" type="text/css" href="frameworks/bootstrap-3.3.5/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+<link rel="stylesheet" href="frameworks/bootstrap-3.3.5/css/bootstrap.css">
+<link rel="stylesheet" href="frameworks/bootstrap-3.3.5/css/offcanvas.css">
+<link rel="stylesheet" href="css/stylesheet.css">
 </head>
 
 <body>
 <div class="container">
   <div class="row">
-    <div class="col-md-12 input">
+    <div class="col-xs-10 col-sm-12 col-md-12 input">
       <p>
         <input type="search" class="form-control" data-bind="textInput: query" placeholder="Search.." autofocus="autofocus" />
       </p>
     </div>
+    <div class="col-md-1 visible-xs">
+      <button type="button navbar-toggle" data-toggle="offcanvas" data-target="#list">
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
+      </button>
+    </div>
   </div>
-  <div class="row">
-    <div class="col-md-3" id="list">
+  <div class="row row-offcanvas row-offcanvas-left">
+    <div class="col-xs-3 col-sm-3 col-md-3 sidebar-offcanvas" id="list"  role="navigation">
       <div class="halfheight">
         <H3><span>Key locations:</span></H3>
         <ul data-bind="foreach: iniList">
@@ -35,16 +41,16 @@
         <ul id="wikiInfo"></ul>
       </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-xs-12 col-sm-9 col-md-9">
       <div id="googleMap"></div>
     </div>
   </div>
 </div>
-
-<script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="frameworks/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/map.js"></script>
-</body>
+<script async defer src="http://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
 
+<script async src="js/map.js"></script>
+<script async src="frameworks/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script async src="frameworks/bootstrap-3.3.5/js/offcanvas.js"></script>
+</body>
 </html>

@@ -41,11 +41,10 @@ var nepalList = [
 }
 ];
 var map;
-var marks = [];
 var center={lat: 27.711292, lng: 85.316355};
-var infoWindow = new google.maps.InfoWindow();
+// var infoWindow = new google.maps.InfoWindow();
 var $wikiElem = $('#wikiInfo');
-// Add Google map to div
+// Add Google map to div (Called from index.html when the google maps api is loaded)
 function initMap() {
   var mapProp = {
     center:center,
@@ -53,12 +52,14 @@ function initMap() {
     mapTypeId:google.maps.MapTypeId.ROADMAP
   };
   map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
+  ko.applyBindings(new searchViewModel());
 }
-initMap();
+// initMap();
 
 // Automatically updated list with knockout.js which adds markers to a Google Map
 // and fetches lookup of pressed item on Wikipedia
 function searchViewModel() {
+  var infoWindow = new google.maps.InfoWindow();
   var self = this;
   var markers = [];
   // The array for the list
@@ -85,7 +86,7 @@ function searchViewModel() {
     // Delete all markers from map
     for (var j = 0; j < markers.length; j++) {
       markers[j].setMap(null);
-    };
+    }
     // Delete any text in the wikiElem UL in index.HTML
     $wikiElem.text("");
     // Empty the markers array before repopulating with new list
@@ -107,10 +108,9 @@ function searchViewModel() {
     // Function that opens the infoWindow of any clicked marker. Called from the list in index.html
     self.openInfo = function(inp) {
       infoWindow.setContent(inp.description);
-      var updlatlng = inp.latlng;
       var updlng = inp.latlng.lng;
       var updlat = inp.latlng.lat + 0.00077;
-      var updpos = {lat: updlat, lng: updlng}
+      var updpos = {lat: updlat, lng: updlng};
       infoWindow.setPosition(updpos);
       infoWindow.open(map);
       self.wikiReq(inp);
@@ -128,6 +128,7 @@ function searchViewModel() {
         url: wikiSource,
         dataType: "jsonp",
         success: function( response){
+            var articleStr, articleSnipStr;
             var articleList = response[1];
             var articleSnip = response[2];
             for (var i = 0; i < articleList.length; i++) {
@@ -135,20 +136,19 @@ function searchViewModel() {
               articleSnipStr = articleSnip[i];
               var url = 'http://en.wikipedia.org/wiki/' + articleStr;
               $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a><p>'+articleSnip+'</p></li>');
-            };
+            }
             clearTimeout(wikiRequestTimeout);
         }
-      })
-    }
+      });
+    };
     // Iterating through the updated list and placing markers
     for (var i = 0; i < self.iniList().length; i++) {
       placeMarker(i);
-    };
-  }
+    }
+  };
     
 // Subscribe to the query variable and run search function when it changes
 self.query.subscribe(self.search);
 // Place markers when first loading the web page
 self.putMarker();
 }
-ko.applyBindings(new searchViewModel());
