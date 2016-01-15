@@ -8,59 +8,44 @@ var nepalList = [
   name: "Children's Art Museum of Nepal",
   latlng: {lat: 27.711140, lng: 85.322141},
   description: 'Creative space designed for children and youth',
-  things: 'Hotel',
-  label: "A"
+  things: 'Hotel'
 },
 {
   name: 'Narayanhity Palace',
   latlng: {lat: 27.715010, lng: 85.318097},
   description: 'The old royal palace where most of the royal family was murdered in 2002',
-  things: 'Museum',
-  label: "B"
+  things: 'Museum'
 },
 {
   name: 'Royal Nepal Academy',
   latlng: {lat: 27.708903, lng: 85.320373},
   description: 'Formerly Royal Nepal Academy, now Nepal Academy',
-  things: 'School',
-  label: "C"
+  things: 'School'
 },
 {
   name: 'Department of passport',
   latlng: {lat: 27.714620, lng: 85.316349},
   description: "The department of passports where there's always a long line of people renewing their passports for overseas work",
-  things: 'Passports...?',
-  label: "D"
+  things: 'Passports...?'
 },
 {
   name: 'Garden of Dreams',
   latlng: {lat: 27.714464, lng: 85.314480},
   description: 'A neo-classical garden',
-  things: 'Hotel',
-  label: "E"
+  things: 'Hotel'
 }
 ];
 var map;
-var center={lat: 27.711292, lng: 85.316355};
-// var infoWindow = new google.maps.InfoWindow();
-var $wikiElem = $('#wikiInfo');
-// Add Google map to div (Called from index.html when the google maps api is loaded)
-function initMap() {
-  var mapProp = {
-    center:center,
-    zoom:16,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
-  ko.applyBindings(new searchViewModel());
-}
-// initMap();
+var center={lat: 27.712039, lng: 85.317721};
 
 // Automatically updated list with knockout.js which adds markers to a Google Map
 // and fetches lookup of pressed item on Wikipedia
 function searchViewModel() {
   var infoWindow = new google.maps.InfoWindow();
   var self = this;
+  // Knockout Observables for showing wikipedia data in DOM
+  self.articleStr = ko.observable();
+  self.articleHead = ko.observable();
   var markers = [];
   // The array for the list
   self.iniList = ko.observableArray(nepalList);
@@ -87,8 +72,6 @@ function searchViewModel() {
     for (var j = 0; j < markers.length; j++) {
       markers[j].setMap(null);
     }
-    // Delete any text in the wikiElem UL in index.HTML
-    $wikiElem.text("");
     // Empty the markers array before repopulating with new list
     markers = [];
     // Function that populates markers array and places them on the map
@@ -96,20 +79,20 @@ function searchViewModel() {
       var marker = new google.maps.Marker({
         position: self.iniList()[loc].latlng,
         map: map,
-        title: self.iniList()[loc].name,
-        label: self.iniList()[loc].label
+        title: self.iniList()[loc].name
         });
       markers.push(marker);
       google.maps.event.addListener(marker, 'click', function() {
         infoWindow.setContent(self.iniList()[loc].description);
         infoWindow.open(map, marker);
+        self.wikiReq(self.iniList()[loc]);
       });
     }
     // Function that opens the infoWindow of any clicked marker. Called from the list in index.html
     self.openInfo = function(inp) {
       infoWindow.setContent(inp.description);
       var updlng = inp.latlng.lng;
-      var updlat = inp.latlng.lat + 0.00077;
+      var updlat = inp.latlng.lat + 0.0015;
       var updpos = {lat: updlat, lng: updlng};
       infoWindow.setPosition(updpos);
       infoWindow.open(map);
@@ -117,26 +100,19 @@ function searchViewModel() {
     };
     // Function that makes AJAX requests to wikipedia when a marker is clicked. called from openInfo()
     self.wikiReq = function(inp) {
-      // var $wikiElem = $('#wikiInfo');
-      $wikiElem.text("");
       var wikiSource = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + inp.name + '&format=json&callback=wikiCallback';
       var wikiRequestTimeout = setTimeout(function(){
-        $wikiElem.text("Failed to get Wikipedia resources");
+        articleStr = "Failed to get Wikipedia resources";
       }, 5000);
 
       $.ajax({
         url: wikiSource,
         dataType: "jsonp",
         success: function( response){
-            var articleStr, articleSnipStr;
             var articleList = response[1];
             var articleSnip = response[2];
-            for (var i = 0; i < articleList.length; i++) {
-              articleStr = articleList[i];
-              articleSnipStr = articleSnip[i];
-              var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-              $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a><p>'+articleSnip+'</p></li>');
-            }
+            self.articleHead(articleList[0]);
+            self.articleStr(articleSnip[0]);
             clearTimeout(wikiRequestTimeout);
         }
       });
@@ -151,4 +127,14 @@ function searchViewModel() {
 self.query.subscribe(self.search);
 // Place markers when first loading the web page
 self.putMarker();
+}
+// Add Google map to div (Called from index.html when the google maps api is loaded)
+function initMap() {
+  var mapProp = {
+    center:center,
+    zoom:15,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
+  ko.applyBindings(new searchViewModel());
 }
