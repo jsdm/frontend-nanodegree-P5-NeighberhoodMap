@@ -65,7 +65,6 @@ function searchViewModel() {
   };
   // Function that puts markers to map (and deleting old ones first - and deleting any wikipedia information)
   self.putMarker = function() {
-    var oldMarker;
     // Delete all markers from map
     for (var j = 0; j < markers.length; j++) {
       markers[j].setMap(null);
@@ -74,6 +73,7 @@ function searchViewModel() {
     markers = [];
     // Function that populates markers array and places them on the map
     function placeMarker(loc){
+      var oldMarker;
       var marker = new google.maps.Marker({
         position: self.iniList()[loc].latlng,
         map: map,
@@ -81,37 +81,21 @@ function searchViewModel() {
         });
       markers.push(marker);
       google.maps.event.addListener(marker, 'click', function() {
-        self.markerBounce(marker);
-        // marker.setAnimation(google.maps.Animation.BOUNCE);
-        self.wikiReq(self.iniList()[loc]);
-        // infoWindow.open(map, marker);
+        self.openInfo(self.iniList()[loc]);
       });
     }
-    // Function that sets animation on for the clicked item and off for the rest
-    self.markerBounce = function(mark) {
-      if (oldMarker!=null) {oldMarker.setAnimation(null);}
-      mark.setAnimation(google.maps.Animation.BOUNCE);
-      infoWindow.open(map, mark);
-      oldMarker = mark;
-      
-    };
     // Function that opens the infoWindow of any clicked marker. Called from the list in index.html
     self.openInfo = function(inp) {
       for (var j = 0; j < markers.length; j++) {
-        if(markers[j].title == inp.name){
-          self.markerBounce(markers[j]);
+        if(markers[j].title === inp.name){
+          markers[j].setAnimation(google.maps.Animation.BOUNCE);
         }
+        else {markers[j].setAnimation(null);}
       }
-      self.wikiReq(inp);
-      var updlng = inp.latlng.lng;
-      var updlat = inp.latlng.lat + 0.0015;
-      var updpos = {lat: updlat, lng: updlng};
-      infoWindow.setPosition(updpos);
-      infoWindow.open(map);
-      self.wikiReq(inp);
+      self.wikiReq(inp, map);
     };
     // Function that makes AJAX requests to wikipedia when a marker is clicked. called from openInfo()
-    self.wikiReq = function(inp) {
+    self.wikiReq = function(inp, map) {
       var wikiSource = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + inp.name + '&format=json&callback=wikiCallback';
       var wikiRequestTimeout = setTimeout(function(){
         infoWindow.setContent("Failed to get Wikipedia resources");
@@ -132,6 +116,11 @@ function searchViewModel() {
               '</div>'+
               '</div>';
             infoWindow.setContent(infoWindowString);
+            var updlng = inp.latlng.lng;
+            var updlat = inp.latlng.lat + 0.0015;
+            var updpos = {lat: updlat, lng: updlng};
+            infoWindow.setPosition(updpos);
+            infoWindow.open(map);
             clearTimeout(wikiRequestTimeout);
         }
       });

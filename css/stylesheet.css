@@ -4,28 +4,34 @@ body {
   padding-top: 30px;
   padding-bottom: 20px;
 }
+
 ul {
   list-style-type: none;
   padding-left: 10px;
 }
+
 .input {
   border-bottom: 1px grey solid;
   padding-bottom: 20px;
   margin-bottom: 10px;
 }
+
 .mapDiv {
   height: 100%;
   padding-left: 15px;
   border-left: 1px grey solid;
 }
+
 .container-fluid {
   position: relative;
   height: 100%;
 }
+
 #googleMap {
   min-height: 400px;
   height: 100%;
 }
+
 .halfheight {
   height: 50%
 }
