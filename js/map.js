@@ -44,8 +44,6 @@ function searchViewModel() {
   var infoWindow = new google.maps.InfoWindow();
   var self = this;
   // Knockout Observables for showing wikipedia data in DOM
-  self.articleStr = ko.observable();
-  self.articleHead = ko.observable();
   var markers = [];
   // The array for the list
   self.iniList = ko.observableArray(nepalList);
@@ -83,14 +81,13 @@ function searchViewModel() {
         });
       markers.push(marker);
       google.maps.event.addListener(marker, 'click', function() {
-        infoWindow.setContent(self.iniList()[loc].description);
-        infoWindow.open(map, marker);
         self.wikiReq(self.iniList()[loc]);
+        infoWindow.open(map, marker);
       });
     }
     // Function that opens the infoWindow of any clicked marker. Called from the list in index.html
     self.openInfo = function(inp) {
-      infoWindow.setContent(inp.description);
+      self.wikiReq(inp);
       var updlng = inp.latlng.lng;
       var updlat = inp.latlng.lat + 0.0015;
       var updpos = {lat: updlat, lng: updlng};
@@ -102,7 +99,7 @@ function searchViewModel() {
     self.wikiReq = function(inp) {
       var wikiSource = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + inp.name + '&format=json&callback=wikiCallback';
       var wikiRequestTimeout = setTimeout(function(){
-        articleStr = "Failed to get Wikipedia resources";
+        infoWindow.setContent("Failed to get Wikipedia resources");
       }, 5000);
 
       $.ajax({
@@ -111,8 +108,15 @@ function searchViewModel() {
         success: function( response){
             var articleList = response[1];
             var articleSnip = response[2];
-            self.articleHead(articleList[0]);
-            self.articleStr(articleSnip[0]);
+            var infoWindowString = '<div id="content">'+
+              '<div id="siteNotice">'+
+              '</div>'+
+              '<h3 id="firstHeading" class="firstHeading">'+articleList[0]+'</h3>'+
+              '<div id="bodyContent">'+
+              '<p>'+articleSnip[0]+'</p>'+
+              '</div>'+
+              '</div>';
+            infoWindow.setContent(infoWindowString);
             clearTimeout(wikiRequestTimeout);
         }
       });
