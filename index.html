@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script type="text/javascript" src="frameworks/knockout-3.3.0.js"></script>
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags (http://getbootstrap.com/getting-started/#template) -->
 <title>Neighborhood Map</title>
 <link rel="stylesheet" href="frameworks/bootstrap-3.3.5/css/bootstrap.css">
 <link rel="stylesheet" href="frameworks/bootstrap-3.3.5/css/offcanvas.css">
@@ -15,11 +13,11 @@
 <body>
 <div class="container">
   <div class="row">
-    <div class="col-xs-10 col-sm-12 col-md-12 input">
-      <p>
-        <input type="search" class="form-control" data-bind="textInput: query" placeholder="Search.." autofocus="autofocus" />
-      </p>
+    <div class="col-xs-10 col-sm-12 col-md-11 input">
+        <input type="search" autofocus="autofocus" class="form-control" data-bind="textInput: query" placeholder="Search.."/>
     </div>
+  </div>
+  <div class="row">
     <div class="col-md-1 visible-xs">
       <button type="button navbar-toggle" data-toggle="offcanvas" data-target="#list">
         <span class="glyphicon glyphicon-menu-hamburger"></span>
@@ -42,9 +40,14 @@
     </div>
   </div>
 </div>
+<script async>function googleError() {
+  var mapArea = document.getElementById('googleMap');
+  mapArea.innerHTML="Ooops! Somethimg went horribly wrong with GoogleMaps. Tjeck your internet connection and try to reload the page (Press F5( PC) or ctrl+r (mac)";}
+</script>
+<script async src="frameworks/knockout-3.3.0.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script async src="js/map.js"></script>
-<script async defer src="http://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
+<script async defer src="http://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap" onerror="googleError()"></script>
 <script async src="frameworks/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script async src="frameworks/bootstrap-3.3.5/js/offcanvas.js"></script>
 </body>

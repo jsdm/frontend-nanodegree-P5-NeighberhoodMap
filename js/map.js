@@ -6,33 +6,23 @@
 var nepalList = [
 {
   name: "Children's Art Museum of Nepal",
-  latlng: {lat: 27.711140, lng: 85.322141},
-  description: 'Creative space designed for children and youth',
-  things: 'Hotel'
+  latlng: {lat: 27.711140, lng: 85.322141}
 },
 {
   name: 'Narayanhity Palace',
-  latlng: {lat: 27.715010, lng: 85.318097},
-  description: 'The old royal palace where most of the royal family was murdered in 2002',
-  things: 'Museum'
+  latlng: {lat: 27.715010, lng: 85.318097}
 },
 {
   name: 'Royal Nepal Academy',
-  latlng: {lat: 27.708903, lng: 85.320373},
-  description: 'Formerly Royal Nepal Academy, now Nepal Academy',
-  things: 'School'
+  latlng: {lat: 27.708903, lng: 85.320373}
 },
 {
   name: 'Department of passport',
-  latlng: {lat: 27.714620, lng: 85.316349},
-  description: "The department of passports where there's always a long line of people renewing their passports for overseas work",
-  things: 'Passports...?'
+  latlng: {lat: 27.714620, lng: 85.316349}
 },
 {
   name: 'Garden of Dreams',
-  latlng: {lat: 27.714464, lng: 85.314480},
-  description: 'A neo-classical garden',
-  things: 'Hotel'
+  latlng: {lat: 27.714464, lng: 85.314480}
 }
 ];
 var map;
@@ -99,6 +89,11 @@ function searchViewModel() {
       var wikiSource = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + inp.name + '&format=json&callback=wikiCallback';
       var wikiRequestTimeout = setTimeout(function(){
         infoWindow.setContent("Failed to get Wikipedia resources");
+        var updlng = inp.latlng.lng;
+          var updlat = inp.latlng.lat + 0.0015;
+          var updpos = {lat: updlat, lng: updlng};
+          infoWindow.setPosition(updpos);
+          infoWindow.open(map);
       }, 5000);
 
       $.ajax({
@@ -107,6 +102,7 @@ function searchViewModel() {
         success: function( response){
             var articleList = response[1];
             var articleSnip = response[2];
+            if(articleSnip[0]==''){articleSnip[0] = "No more info";}
             var infoWindowString = '<div id="content">'+
               '<div id="siteNotice">'+
               '</div>'+
